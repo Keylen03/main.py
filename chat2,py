@@ -75,6 +75,22 @@ async def meme(ctx):
     img_name = random.choice(os.listdir('imagenes'))
     with open(f'imagenes/{img_name}', 'rb') as f:
         picture = discord.File(f)
+@bot.command()
+async def consciencia(ctx):
+    await ctx.send("""La basura tecnológica son los residuos que se producen por la eliminación de los equipos que funcionan con electricidad. Estos residuos contienen sustancias tóxicas y metales pesados, como por ejemplo el plomo, que pueden contaminar el suelo, el agua y los alimentos. 
+La acumulación de basura tecnológica supone un daño significativo en los ecosistemas. Estos elementos tóxicos contaminan ríos, lagos y mares, y emiten gases a la atmósfera que provocan desequilibrios en los ecosistemas. 
+""")
+    photo = random.choice(os.listdir("medioambiente"))
+    with open(f"medioambiente/{photo}", "rb") as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
+
+@bot.command()
+async def planet_sick(ctx):
+    photo = random.choice(os.listdir("c_planeta"))
+    with open(f"c_planeta/{photo}", "rb") as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
  
     await ctx.send(file=picture)
 
