@@ -21,6 +21,32 @@ bot = commands.Bot(command_prefix='$', description=description, intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
+@bot.event
+async def on_member_join(member):
+    # Envía un mensaje de bienvenida e instructivo al canal de bienvenida (puedes ajustar esto según tus necesidades)
+    channel = member.guild.system_channel
+    if channel is not None:
+        await channel.send(f"Bienvenido {member.mention} al servidor. Soy un bot y estoy aquí para brindarte entretenimiento. "
+                           f"Para conocer mis comandos, escribe `$comandos`.")
+@bot.command()
+async def welcome(ctx):
+    await ctx.send("Hola! Soy un bot, y mi proposito es brindarte entretenimiento. ")
+    await ctx.send("Cuento con varios comandos, los cuales puedes usar escribiendo el nombre de los mismos, pero primero escribe el prefijo ($).")
+    await ctx.send("Escribe `$comandos`  para ver mis comandos")
+@bot.command()
+async def comandos(ctx):
+    await ctx.send("Estos son mis comandos: ")
+    await ctx.send("\u25AB"+" add: escribe  `$add n1 n2`  para sumar dos cantidades *n1 y n2 son variables.")
+    await ctx.send("\u25AB"+" roll: escribe `$roll NdN`  para recibir un formato de dado N son las caras y la cantidad de dados.")
+    await ctx.send("\u25AB"+" repeat: escribe `$repeat n phrase` para recibir las veces que escribiste la frase que escribas.")
+    await ctx.send("\u25AB"+" choose: escribe  `$choose a b c d...`  para recibir una opcion entre las que escribiste.")
+    await ctx.send("\u25AB"+" meme: escribe  `$meme`  para recibir un meme random.")
+    await ctx.send("\u25AB"+" consciencia: escribe  `$consciencia`  para recibir un mensaje de reflexion.")
+    await ctx.send("\u25AB"+" planet_sick: escribe  `$planet_sick`  para recibir una imagen sarcastica de consciencia.")
+    await ctx.send("\u25AB"+" exclusive: escribe  `$exclusive`  y si eres digno, te mostrara un buen meme. De lo contrario, deberas adivinar un acertijo.")
+    await ctx.send("\u25AB"+" dog: escribe  `$dog`  para recibir una imagen random de un perrito.")
+    await ctx.send("\u25AB"+" duck: escribe  `$duck`  para recibir una imagen random de un patito.")
+   
 
 #Toma dos numeros y los suma. Sintaxis: $add numero numero
 @bot.command()
@@ -45,6 +71,7 @@ async def roll(ctx, dice: str):
 @bot.command(description='For when you wanna settle the score some other way')
 async def choose(ctx, *choices: str):
     """Chooses between multiple choices."""
+    await ctx.send("Mi eleccion es: ")
     await ctx.send(random.choice(choices))
 
 
@@ -56,25 +83,13 @@ async def repeat(ctx, times: int, content='repeating...'):
 
 
 @bot.command()
-async def joined(ctx, member: discord.Member):
-    """Says when a member joined."""
-    await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
-
-
-@bot.group()
-async def cool(ctx):
-    """Says if a user is cool.
-
-    In reality this just checks if a subcommand is being invoked.
-    """
-    if ctx.invoked_subcommand is None:
-        await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
-
-@bot.command()
 async def meme(ctx):
     img_name = random.choice(os.listdir('imagenes'))
     with open(f'imagenes/{img_name}', 'rb') as f:
         picture = discord.File(f)
+ 
+    await ctx.send(file=picture)
+
 @bot.command()
 async def consciencia(ctx):
     await ctx.send("""La basura tecnológica son los residuos que se producen por la eliminación de los equipos que funcionan con electricidad. Estos residuos contienen sustancias tóxicas y metales pesados, como por ejemplo el plomo, que pueden contaminar el suelo, el agua y los alimentos. 
@@ -91,8 +106,7 @@ async def planet_sick(ctx):
     with open(f"c_planeta/{photo}", "rb") as f:
         picture = discord.File(f)
     await ctx.send(file=picture)
- 
-    await ctx.send(file=picture)
+
 
 carpeta_nombre = 'imagenes'
 imagen_nombre = 'MEME.png'
@@ -147,7 +161,6 @@ def get_duck_image_url():
     data = res.json()
     return data['url']
 
-
 @bot.command('dog')
 async def dog(ctx):
     '''Una vez que llamamos al comando duck, 
@@ -157,15 +170,9 @@ async def dog(ctx):
     await ctx.send(image_url)
 
 @bot.command("duck")
-async def fox(ctx):
+async def duck(ctx):
     image_url = get_duck_image_url()
     await ctx.send("Aqui tienes tu patito")
     await ctx.send(image_url)
 
-@cool.command(name='bot')
-async def bot_(ctx):
-    """Is the bot cool?"""
-    await ctx.send('Yes, the bot is cool.')
-
-
-bot.run('TOKEN')
+bot.run('TOKEN!!!')
